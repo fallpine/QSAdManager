@@ -11,6 +11,8 @@ Pod::Spec.new do |spec|
   spec.source       = { :git => "https://github.com/fallpine/QSAdManager.git", :tag => "#{spec.version}" }
   spec.swift_version = '5'
   spec.source_files  = "QSAdManager/QSAdManager/Tool/*.{swift}"
+  # 静态库
+  spec.static_framework = true
   spec.dependency "Google-Mobile-Ads-SDK", "13.1.0"
   spec.dependency "SkeletonView", "1.30.4"
   spec.dependency "SnapKit", "5.7.1"
