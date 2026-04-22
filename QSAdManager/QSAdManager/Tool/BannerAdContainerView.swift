@@ -47,11 +47,11 @@ public final class BannerAdContainerView: UIView {
     public init(
         adUnitID: String,
         rootViewController: UIViewController,
-        options: BannerAdOptions = .init()
+        options: BannerAdOptions? = nil
     ) {
         self.adUnitID = adUnitID
         self.rootViewController = rootViewController
-        self.options = options
+        self.options = options ?? BannerAdOptions()
         super.init(frame: .zero)
         setupViews()
     }
