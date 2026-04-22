@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name         = "QSAdManager"
-  spec.version      = "1.0.0"
+  spec.version      = "1.0.1"
   spec.summary      = "广告"
   spec.description  = "广告管理"
   spec.homepage     = "https://github.com/fallpine/QSAdManager"
