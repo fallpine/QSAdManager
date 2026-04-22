@@ -186,7 +186,7 @@ public final class BannerAdContainerView: UIView {
 
         bannerAdView.rootViewController = rootViewController
 
-        let adSize = currentOrientationAnchoredAdaptiveBanner(width: width)
+        let adSize = largeAnchoredAdaptiveBanner(width: width)
         bannerAdView.adSize = adSize
         heightConstraint?.update(offset: adSize.size.height)
 

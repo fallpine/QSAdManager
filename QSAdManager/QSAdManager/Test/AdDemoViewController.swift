@@ -59,6 +59,7 @@ final class AdDemoViewController: UIViewController {
         adUnitID: DemoAdUnitID.interstitial
     )
 
+    private var hasStartedPrepareFlow = false
     private var hasStartedBannerLoad = false
     private var hasStartedInterstitialPreload = false
 
@@ -70,19 +71,11 @@ final class AdDemoViewController: UIViewController {
         configureAdSystem()
         setupViews()
         bindBannerEvents()
-        preloadInterstitialIfNeeded()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
-        guard hasStartedBannerLoad == false else {
-            return
-        }
-
-        hasStartedBannerLoad = true
-        updateStatus("开始加载 Banner 广告...")
-        bannerContainer.loadAd()
+        startAdFlowIfNeeded()
     }
 
     private func configureAdSystem() {
@@ -139,6 +132,40 @@ final class AdDemoViewController: UIViewController {
                 self.updateStatus("Banner 已点击。")
             }
         }
+    }
+
+    private func startAdFlowIfNeeded() {
+        guard hasStartedPrepareFlow == false else {
+            return
+        }
+
+        hasStartedPrepareFlow = true
+        updateStatus("正在执行广告系统准备流程...")
+
+        Task { [weak self] in
+            guard let self else {
+                return
+            }
+
+            let result = await AdSystem.prepare(presentingFrom: self)
+            await self.handlePrepareResult(result)
+        }
+    }
+
+    private func handlePrepareResult(_ result: ConsentResult) async {
+        guard result.canRequestAds else {
+            updateStatus("广告系统准备完成，但当前不可请求广告。")
+            return
+        }
+
+        updateStatus("广告系统准备完成，开始加载 Banner 和插屏广告...")
+
+        if hasStartedBannerLoad == false {
+            hasStartedBannerLoad = true
+            bannerContainer.loadAd()
+        }
+
+        preloadInterstitialIfNeeded()
     }
 
     private func preloadInterstitialIfNeeded() {
